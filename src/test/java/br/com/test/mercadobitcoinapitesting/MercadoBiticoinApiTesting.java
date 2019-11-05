@@ -72,6 +72,8 @@ public class MercadoBiticoinApiTesting {
 	 * Teste que verifica o método GET do endpoint do livro de ofertas de Bitcoin (/BTC/orderbook/)
 	 * espera-se que HttpStatus 200 Ok  
 	 */
+
+	@Test
 	void whenGetBtcOrderBookThenExpect200OkAndValidResponseBody() {
 		
 		String btcPath = "BTC/orderbook/";
