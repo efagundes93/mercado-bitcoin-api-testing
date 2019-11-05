@@ -49,6 +49,7 @@ public class MercadoBiticoinApiTesting {
 			.body("ticker.buy", is(anything()))
 			.body("ticker.sell", is(anything()))
 			.body("ticker.date", is(anything()));
+			
 	}
 	
 	/**
@@ -56,7 +57,7 @@ public class MercadoBiticoinApiTesting {
 	 * 405Method Not Allowed
 	 */
 	@Test
-	void whenPostInBtcTickerPostThenExpect405MethodNotAllowed() {
+	void whenPostInBtcTickerThenExpect405MethodNotAllowed() {
 		
 		String btcPath = "BTC/ticker/";
 		given()
@@ -67,6 +68,36 @@ public class MercadoBiticoinApiTesting {
 			.statusCode(405);
 	}
 	
+	/**
+	 * Teste que verifica o método GET do endpoint do livro de ofertas de Bitcoin (/BTC/orderbook/)
+	 * espera-se que HttpStatus 200 Ok  
+	 */
+	void whenGetBtcOrderBookThenExpect200OkAndValidResponseBody() {
+		
+		String btcPath = "BTC/orderbook/";
+		given()
+			.relaxedHTTPSValidation()
+			.when()
+			.get(BASE_URL + btcPath)
+			.then()
+			.statusCode(200)
+			.contentType(ContentType.JSON)
+			.body("asks", is(anything()));
+	}
 	
-	
+	/**
+	 * Teste que verifica o método POST do endpoint do livro de ofertas de Bitcoin (/BTC/orderbook/)
+	 * espera-se que HttpStatus 405 Method Not Allowed  
+	 */
+	@Test
+	void whenPostInBtcOrderBookThenExpect405MethodNotAllowed() {
+		
+		String btcPath = "BTC/orderbook/";
+		given()
+			.relaxedHTTPSValidation()
+			.when()
+			.post(BASE_URL + btcPath)
+			.then()
+			.statusCode(405);
+	}
 }
