@@ -4,9 +4,14 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import br.com.test.mercadobitcoinapitesting.domain.TestReport;
+import br.com.test.mercadobitcoinapitesting.repository.TestReportRepository;
 import io.restassured.http.ContentType;
 /**
  * Classe para testes de enpoints da API publica
@@ -19,6 +24,9 @@ import io.restassured.http.ContentType;
  */
 @SpringBootTest
 public class MercadoBiticoinApiTesting {
+	
+	@Autowired
+	private TestReportRepository repository;
 
 	
 	private final String BASE_URL = "https://www.mercadobitcoin.net/api/";
@@ -32,15 +40,18 @@ public class MercadoBiticoinApiTesting {
 	 * @Since 2019
 	 */
 	@Test
-	void whenGetInBtcTickerThenExpect200OkAndValidResponseBody() {
-		
+	public void whenGetInBtcTickerThenExpect200OkAndValidResponseBody() {
+		TestReport report  = new TestReport();
+		report.setTestName("whenGetInBtcTickerThenExpect200OkAndValidResponseBody");
+
+		report.setStartedAt(LocalDateTime.now());
 		String btcPath = "BTC/ticker/";
 		given()
 			.relaxedHTTPSValidation()
 			.when()
 			.get(BASE_URL + btcPath)
 			.then()
-			.statusCode(200)
+			.statusCode(is(200))
 			.contentType(ContentType.JSON)
 			.body("ticker.high", is(anything()))
 			.body("ticker.low", is(anything()))
@@ -49,7 +60,9 @@ public class MercadoBiticoinApiTesting {
 			.body("ticker.buy", is(anything()))
 			.body("ticker.sell", is(anything()))
 			.body("ticker.date", is(anything()));
-			
+		report.setStatus("OK");
+		report.setFinishedAt(LocalDateTime.now());
+		this.repository.save(report);
 	}
 	
 	/**
@@ -58,14 +71,20 @@ public class MercadoBiticoinApiTesting {
 	 */
 	@Test
 	void whenPostInBtcTickerThenExpect405MethodNotAllowed() {
-		
+		TestReport report  = new TestReport();
+		report.setTestName("whenPostInBtcTickerThenExpect405MethodNotAllowed");
+
+		report.setStartedAt(LocalDateTime.now());
 		String btcPath = "BTC/ticker/";
 		given()
 			.relaxedHTTPSValidation()
 			.when()
 			.post(BASE_URL + btcPath)
 			.then()
-			.statusCode(405);
+			.statusCode(is(405));
+		report.setStatus("OK");
+		report.setFinishedAt(LocalDateTime.now());
+		this.repository.save(report);
 	}
 	
 	/**
@@ -75,16 +94,23 @@ public class MercadoBiticoinApiTesting {
 
 	@Test
 	void whenGetBtcOrderBookThenExpect200OkAndValidResponseBody() {
-		
+		TestReport report  = new TestReport();
+		report.setTestName("whenGetBtcOrderBookThenExpect200OkAndValidResponseBody");
+
+		report.setStartedAt(LocalDateTime.now());
 		String btcPath = "BTC/orderbook/";
 		given()
 			.relaxedHTTPSValidation()
 			.when()
 			.get(BASE_URL + btcPath)
 			.then()
-			.statusCode(200)
+			.statusCode(is(200))
 			.contentType(ContentType.JSON)
 			.body("asks", is(anything()));
+		
+		report.setStatus("OK");
+		report.setFinishedAt(LocalDateTime.now());
+		this.repository.save(report);
 	}
 	
 	/**
@@ -94,12 +120,21 @@ public class MercadoBiticoinApiTesting {
 	@Test
 	void whenPostInBtcOrderBookThenExpect405MethodNotAllowed() {
 		
+		
+		TestReport report  = new TestReport();
+		report.setTestName("whenPostInBtcOrderBookThenExpect405MethodNotAllowed");
+
+		report.setStartedAt(LocalDateTime.now());
 		String btcPath = "BTC/orderbook/";
 		given()
 			.relaxedHTTPSValidation()
 			.when()
 			.post(BASE_URL + btcPath)
 			.then()
-			.statusCode(405);
+			.statusCode(is(405));
+		
+		report.setStatus("OK");
+		report.setFinishedAt(LocalDateTime.now());
+		this.repository.save(report);
 	}
 }
